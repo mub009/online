@@ -8,7 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\models\TblProduct;
+use app\models\ProductView;
 
 class SiteController extends Controller
 {
@@ -38,21 +38,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
 
     /**
      * Displays homepage.
@@ -63,7 +48,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
   
-        $model=new TblProduct();
+        $model=new ProductView();
         $data=$model->dbdata();
         return $this->render('index',['data'=>$data]);
     }
@@ -78,7 +63,7 @@ class SiteController extends Controller
     */  
     public function actionSingleproduct()
     {
-        $model= new TblProduct;
+        $model= new ProductView;
         $data=$model->viewsingleproduct($id=2);
         return $this ->render('view',['data'=>$data]);
     }
