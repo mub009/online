@@ -1,85 +1,78 @@
+
 <?php
 
-namespace app\controllers;
+namespace app\models;
 
 use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
-use app\models\TblProduct;
 
-class SiteController extends Controller
+/**
+ * This is the model class for table "tbl_product".
+ *
+ * @property integer $pk_int_product_id
+ * @property string $vchr_product_name
+ * @property string $vchr_pic
+ * @property integer $int_price
+ * @property string $text_product_description
+ * @property string $dat_created_date
+ * @property integer $fk_int_category_id
+ *
+ * @property TblOrderDetails[] $tblOrderDetails
+ * @property TblCategory $fkIntCategory
+ */
+class TblProduct extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public static function tableName()
+    {
+        return 'tbl_product';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+            [['int_price', 'fk_int_category_id'], 'integer'],
+            [['text_product_description'], 'string'],
+            [['dat_created_date'], 'safe'],
+            [['vchr_product_name', 'vchr_pic'], 'string', 'max' => 200],
+            [['fk_int_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => TblCategory::className(), 'targetAttribute' => ['fk_int_category_id' => 'pk_int_category_id']],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function actions()
+    public function attributeLabels()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
+            'pk_int_product_id' => 'Pk Int Product ID',
+            'vchr_product_name' => 'Vchr Product Name',
+            'vchr_pic' => 'Vchr Pic',
+            'int_price' => 'Int Price',
+            'text_product_description' => 'Text Product Description',
+            'dat_created_date' => 'Dat Created Date',
+            'fk_int_category_id' => 'Fk Int Category ID',
         ];
     }
 
     /**
-     * Displays homepage.
-     *
-     * @return string
+     * @return \yii\db\ActiveQuery
      */
-    
-    public function actionIndex()
+    public function getTblOrderDetails()
     {
-  
-        $model=new TblProduct();
-        $data=$model->dbdata();
-        return $this->render('index',['data'=>$data]);
+        return $this->hasMany(TblOrderDetails::className(), ['fk_int_product_id' => 'pk_int_product_id']);
     }
-
-    
 
     /**
-    *selects the single product details
-    *displays the  details of a product in a page
-    *int_product_id receives the id of the selected product
-    *@return single-product page along with result data.
-    */  
-    public function actionSingleproduct()
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFkIntCategory()
     {
-        $model= new TblProduct;
-        $data=$model->viewsingleproduct($id=2);
-        return $this ->render('view',['data'=>$data]);
+        return $this->hasOne(TblCategory::className(), ['pk_int_category_id' => 'fk_int_category_id']);
     }
 }
+
