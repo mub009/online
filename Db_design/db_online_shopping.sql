@@ -299,3 +299,34 @@ ALTER TABLE `tbl_user`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+---------------------------------------------------------------------------------------------------------------------------------------
+--
+-- Table structure for table `tbl_size`
+--
+
+CREATE TABLE `tbl_size` (
+  `pk_int_size_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `vchr_size` varchar(100) NOT NULL
+);
+
+INSERT INTO `tbl_size` (`pk_int_size_id`, `vchr_size`) VALUES
+(1, 'S'),
+(2, 'M'),
+(3, 'L'),
+(4, 'XL'),
+(5, 'XXL'),
+(6, 'Single Size');
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+--
+-- Table structure for table `tbl_product_size_mapping`
+--
+
+CREATE TABLE `tbl_product_size_mapping` (
+  `pk_int_map_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `fk_int_product_id` int(11) NOT NULL,
+  `fk_int_size_id` int(11) NOT NULL
+);
